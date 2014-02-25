@@ -1,0 +1,12 @@
+@name 
+@inputs 
+@outputs 
+@persist 
+@trigger 
+
+runOnChat(1)
+if(chatClk()) {
+    lastSpoke:hint(lastSaid(),5)
+
+}
+    

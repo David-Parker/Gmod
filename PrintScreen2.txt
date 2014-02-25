@@ -1,0 +1,28 @@
+@name PrintScreen
+@inputs Printer:wirelink 
+ 
+runOnTick(1)
+function void clearScreen() {
+    I = 0
+    while(I < 15) {
+        Printer:writeString("                                  ",0,I,0,0)
+        I++
+    }
+}
+if(first()) {
+    Printer:writeString("      INITIALIZING",0,0,900,0)
+}
+X = players()
+Printer:writeString("PING: ",0,0,900,0)
+for(I = 1, X:count()) {
+    Player = X[I,entity]
+    Printer:writeString(toString(I) + ": " + toString(Player:ping()),0,I,900,0)
+}
+timer("Delay",2000)
+if(clk("Delay")) {
+    clearScreen()
+}
+
+
+    
+

@@ -1,0 +1,66 @@
+@name 
+@inputs 
+@outputs 
+@persist Pos:vector Ang OldPos:vector Radius Target:entity Speed Balls Color:vector R G B ColorNum
+@trigger 
+runOnTick(1)
+
+function void updateBall(BallID,Offset) {
+    Ang += Offset
+    X = Radius*cos(Ang)
+    Y = Radius*sin(Ang)
+if(Target:keyAttack1()) {
+   holoPos(BallID,(Target:eye()*2) + vec(0,0,1))
+   holoColor(BallID,Color)
+}
+else {
+    holoPos(BallID,Target:pos() + vec(X,Y,40))
+    holoColor(BallID,Color)
+    Ang -= Offset
+}
+}
+
+function void updates(NumOfBalls) {
+    I = 1
+    while(I < NumOfBalls + 1) {
+        updateBall(I,pi() * 10.5 * I)
+        I++
+    }
+}
+
+function void ballCreate(NumOfBalls) {
+    I = 1
+    while(I < NumOfBalls + 1) {
+        holoCreate(I,Pos,vec(1,1,1),ang(0,0,0),Color,"hqsphere")
+        holoAlpha(I,180)
+        holoRenderFX(I,0)
+        I++
+    }
+}
+    
+if(first()) { 
+    ColorNum = 2
+    R = 1
+    G = 100
+    B = 200
+    Color = vec(R,G,B)
+    Balls = 11
+    Ang = 0
+    Speed = 8
+    Target = findPlayerByName("zeroco")
+    Radius = 50
+    Pos = Target:pos()
+    ballCreate(Balls)
+}
+
+Ang += (pi()/12 * Speed)
+if(R > 252 || R <= 0) {
+    ColorNum = -ColorNum
+}
+R+=ColorNum
+Color = vec(R,G,B)
+updates(Balls)
+
+
+
+

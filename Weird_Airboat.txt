@@ -1,0 +1,16 @@
+@name Weird Airboat
+@inputs 
+@outputs 
+@persist Target:entity Speed
+@trigger 
+runOnTick(1)
+if(first()) {
+    Speed = 500
+    Target = entity():isWeldedTo()
+}
+if(owner():inVehicle()) {
+    Target:setAng(owner():eyeAngles()/2)
+}
+if(owner():keyAttack1() && owner():inVehicle()) {
+    Target:applyForce(Target:mass()*owner():eye()*Speed)
+}

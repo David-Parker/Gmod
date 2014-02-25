@@ -1,0 +1,28 @@
+@name Teleport
+@inputs 
+@outputs 
+@persist Own:entity Enable
+@trigger 
+
+interval(100)
+runOnChat(1)
+
+if (first()) {
+    Own = entity():owner()
+    print("To enable teleporting, type /tele.")
+}
+
+Said = owner():lastSaid():explode(" ")
+
+if (chatClk(owner()) & Said:string(1) == "/tele" & Enable == 0) {
+    Enable = 1
+    print("Teleporting enabled, right click to teleport.")
+    print("To disable, type /tele again.")
+} elseif (chatClk(owner()) & Said:string(1) == "/tele" & Enable == 1) {
+    Enable = 0
+    print("Teleporting disabled.")
+}
+
+if (Enable & Own:keyAttack2()) {
+    Own:warpStuff(Own:aimPos())
+}

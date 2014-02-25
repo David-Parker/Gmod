@@ -1,0 +1,8 @@
+@name 
+@inputs 
+@outputs 
+@persist 
+@trigger 
+E = findPlayerByName("Expression")
+print(E:getMaterial())
+owner():setMaterial("models/wireframe")

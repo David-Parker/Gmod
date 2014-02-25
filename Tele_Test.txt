@@ -1,0 +1,24 @@
+@name Tele Test
+@inputs 
+@outputs 
+@persist SavePos:vector Target:entity SaveAng:angle SaveVel:vector Mag
+@trigger 
+runOnTick(1)
+if(first()) {
+    Mag = 2
+    Target = entity():isWeldedTo()
+    Save = owner():pos()
+}
+if(owner():keyAttack2()) {
+    print("Teleport Location Set!")
+    SavePos = Target:pos()
+    SaveAng = Target:angles()
+    SaveVel = Target:vel()
+}
+if(owner():keyAttack1()) {
+    Target:setAng(SaveAng)
+    Target:setPos(SavePos + vec(0,0,1))
+    Target:applyForce(SaveVel*Target:mass()*Mag)
+    Target:setAng(SaveAng)
+    Target:setAng(SaveAng)
+}

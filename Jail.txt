@@ -1,0 +1,14 @@
+@name Jail
+@inputs 
+@outputs 
+@persist Target:entity Obj:entity Angle:angle
+@trigger 
+runOnTick(1)
+if(first()) {
+    Obj = entity():isWeldedTo()
+    Target = findPlayerByName("Lawler")
+    Angle = Target:angles()
+}
+Obj:setPos(Target:pos() + vec(0,0,50))
+Obj:setAng(Angle)
+

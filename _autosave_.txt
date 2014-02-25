@@ -1,0 +1,54 @@
+@name Dick Follower Big
+@inputs 
+@outputs 
+@persist Target:entity Rad RadS Rad2 TargetS:string LastSaidL:string
+Rad = 5
+Rad2 = 2
+RadS = 15
+runOnTick(1)
+ #searches the player
+#Minor Fix - Bayangan (12/07/2010)
+##print(Target:name()+" has had a dildo placed on him!")
+Me=owner()
+if(first()) {
+    Target=findPlayerByName("lawler")
+}
+#Minor Fix - Bayangan (12/07/2010) #prints the player's name in chat window
+Angle = ang(Target:eyeAngles():pitch()+90, 
+        Target:eyeAngles():yaw(), 
+        Target:eyeAngles():roll())
+
+## Left Testicle
+holoCreate(1)
+holoColor(1,vec(255,50,155))
+holoModel(1,"sphere3")
+holoPos(1,Target:pos()+vec(-20,0,25) + vec(Target:eye():x()*Rad,Target:eye():y()*Rad,0))
+holoScale(1,vec(5,5,5))
+
+## Right Testicle
+holoCreate(2)
+holoColor(2,vec(255,50,155))
+holoModel(2,"sphere3")
+holoPos(2,Target:pos()+vec(25,0,25) + vec(Target:eye():x()*Rad,Target:eye():y()*Rad,0))
+holoScale(2,vec(5,5,5))
+
+
+
+## Shaft
+holoCreate(3)
+holoColor(3,vec(255,50,155))
+holoModel(3,"cylinder")
+holoPos(3,Target:pos()+vec(0,0,80))
+holoScale(3,vec(3.5,3.5,7))
+holoAng(3,ang(0,0,0))
+
+## Tip
+holoCreate(4)
+holoColor(4,vec(255,50,155))
+holoModel(4,"sphere3")
+holoPos(4,Target:pos()+vec(0,0,120))
+holoScale(4,vec(5,5,5))
+
+
+
+

@@ -1,0 +1,44 @@
+#Created by Teh Lawler
+@name Cannon
+@inputs 
+@outputs 
+@persist Pos:vector Pos2:vector Angle:angle Size
+@trigger
+runOnTick(1)
+Me = owner()
+#Me = findPlayerByName("voltz")
+if(first()) {
+    Size = 5
+    holoCreate(1)
+    holoModel(1,"hq_sphere")
+    holoColor(1,vec(111,0,214),100)
+    holoScale(1,vec(5*Size,5*Size,5*Size))
+    holoCreate(2)
+    holoModel(2,"hq_sphere")
+    holoColor(2,vec(133,1,39),255)
+    holoScale(2,vec(3*Size,3*Size,3*Size))
+    Pos = Me:pos() + vec(0,0,10)
+    Angle = ang(0,0,0)
+}
+if(Me:keyAttack1()) {
+    Pos += Me:eye()*40
+    Angle += ang(0,2,0)
+}
+else {
+    O = Me
+    Cur = Pos
+    Goto = O:pos() + vec(0,0,1)
+    Vec = Goto - Cur
+    Pos += Vec/15
+    Angle += ang(0,2,0)
+}
+holoPos(1,Pos + vec(0,0,250))
+holoAng(1,Angle)
+holoPos(2,Pos + vec(0,0,250))
+holoAng(2,Angle)
+
+
+
+
+
+

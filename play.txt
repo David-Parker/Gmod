@@ -1,0 +1,9 @@
+@name 
+@inputs Play
+@outputs 
+@persist Rnd
+@trigger 
+
+if(Play & ~Play){ #if play input is triggered
+    soundPlay(1, soundDuration("vo/aperture_ai/escape_02_sphere_curiosity-" + Rnd + ".wav"), "vo/aperture_ai/escape_02_sphere_curiosity-" + Rnd + ".wav") #play the sound
+}

@@ -1,0 +1,38 @@
+@name Prop Follower
+@inputs Up Forward
+@outputs 
+@persist Chat Go Target:entity TargetS:string LastSaidL:string E:entity
+@trigger
+E = entity():isWeldedTo()
+if(Chat == 0) {
+    runOnChat(1)
+    LastSaidL=owner():lastSaid():lower() #makes lastSaid lower-case
+ 
+    if (LastSaidL:sub(1,8)=="/target ") {
+       TargetS=LastSaidL:sub(9,LastSaidL:length())
+    } #gets the targets name/partial name
+ 
+    if (TargetS!="") {
+        Target=findPlayerByName(TargetS)
+        Chat = 1
+        runOnTick(1)
+    } #searches the player
+    #Minor Fix - Bayangan (12/07/2010)
+} 
+
+elseif(Chat == 1) {
+     LastSaidL=owner():lastSaid():lower() #makes lastSaid lower-case
+    if (LastSaidL=="/stop") {
+        Chat = 0
+        #runOnChat(1)
+    } #gets the targets name/partial name
+    runOnTick(1)
+    O = Target
+    Cur = E:pos()
+    Goto = O:pos() + vec(0,0,100)
+    Vec = Goto - Cur
+
+    E:applyForce((Vec)*E:mass()*1)
+}
+
+

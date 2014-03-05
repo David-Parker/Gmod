@@ -1,7 +1,7 @@
 @name Command Bot
 @inputs 
 @outputs 
-@persist Name:string HatTarget:entity UpdateHat
+@persist Name:string HatTarget:entity UpdateHat 
 @trigger 
 
 function void create_hat() {
@@ -31,7 +31,7 @@ if(first()) {
 }
 
 function void set_hat(Target:string) {
-    Player = findPlayerByName(Target)
+    Player = findPlayerByName(Target:sub(2,Target:length()))
     if(Player:name() != "") {
         UpdateHat = 1
         HatTarget = Player
@@ -61,7 +61,8 @@ function void commands() {
 }
 
 function void health_player(Target:string) {
-    Player = findPlayerByName(Target)
+    Player = findPlayerByName(Target:sub(2,Target:length())) # Weird hack for fixing non string-literal searches
+    #print(findPlayerByName("bot"):name())
     if(Player:name() != "") {
         concmd("say ["+Name+"]: " + Player:name() + "'s health is " +Player:health())
     }
@@ -79,7 +80,7 @@ function void remove_hat() {
 
 #---------------------------END OF FUNCTION DEFINITIONS-------------------------------#
 
-interval(200)
+interval(500)
 if(clk()) {
     LastSaidL = lastSaid() #makes lastSaid lower-case
     if(LastSaidL == "!cb players") {

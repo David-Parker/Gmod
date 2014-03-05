@@ -1,17 +1,21 @@
-@name Rape Command
+@name Rape Mod
 @inputs 
 @outputs 
 @persist LastSaidL:string Target:entity NewTarg Time Origin:vector Over
 @trigger 
+
 interval(700)
 if(first()) {
+    concmd("say [RapeMod]: RapeMod initialized, type !rape help for more info.")
     Origin = vec(1000,1000,1000)
     entity():setPos(Origin)
-    Over = 0
-    Time = 0
-    NewTarg = 0
+    Over = 0 # Is the rape over?
+    Time = 0 # Time elapsed for the current rape
+    NewTarg = 0 # Should a new target be selected?
+    
     entity():setMaterial("sprites/physbeam")
     Target = entity()
+    
     ## Left Testicle
     holoCreate(1)
     holoColor(1,vec(255,50,155))
@@ -36,7 +40,7 @@ if(first()) {
     holoColor(4,vec(255,50,155))
     holoModel(4,"sphere3")
     holoScale(4,vec(5,5,5))
-    }
+}
 if(clk()) {
     if(Target != entity()) {
         Time++
@@ -70,8 +74,12 @@ if(clk()) {
             NewTarg = 0
             concmd("say [RapeMod]: Player not found!")
         }
-    } 
-    if (NewTarg && lastSpoke() != Target) {
+    }
+    if(lastSpoke() == Target && lastSaid():sub(1,5)=="!rape") {
+        NewTarg = 0
+        concmd("say [RapeMod]: You cannot use !rape, while you are being raped!")
+    }
+    if (NewTarg) {
         Time = 0
         Target = findPlayerByName(TargetS)
         NewTarg = 0

@@ -3,7 +3,7 @@
 @outputs 
 @persist 
 @trigger 
-Target = entity():isWeldedTo()
+Target = entity()
 runOnTick(1)
 timer("Delay",200)
 if(clk("Delay")) {

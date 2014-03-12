@@ -1,0 +1,12 @@
+@name 
+@inputs 
+@outputs 
+@persist 
+@trigger 
+@model models/props_phx/construct/metal_plate1.mdl
+
+runOnTick(1)
+entity():setPos(owner():pos() + vec(0,0,100))
+entity():setAng(owner():eyeAngles())
+
+

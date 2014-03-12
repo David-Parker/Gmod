@@ -6,7 +6,7 @@
 @trigger
 runOnTick(1)
 Me = owner()
-#Me = findPlayerByName("voltz")
+#Me = findPlayerByName("lawl")
 if(first()) {
     Size = 5
     holoCreate(1)

@@ -8,7 +8,7 @@ if(owner():keyAttack2()) {
     Bool = 1
 }
 if(first()) {
-    Target = findPlayerByName("pj")
+    Target = findPlayerByName("kill")
     Stick = entity():isWeldedTo()
 }
 if(Bool) {

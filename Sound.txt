@@ -1,0 +1,7 @@
+@name Sound
+@inputs 
+@outputs 
+@persist 
+@trigger 
+
+soundPlay(1,10,"weapons/bugbait/bugbait_impact1.wav")

@@ -6,7 +6,7 @@
 runOnTick(1)
 if(first()) {
     Obj = entity():isWeldedTo()
-    Target = findPlayerByName("Lawler")
+    Target = findPlayerByName("soar")
     Angle = Target:angles()
 }
 Obj:setPos(Target:pos() + vec(0,0,50))

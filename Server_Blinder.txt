@@ -15,7 +15,7 @@ function void createHolos() { # Serialize the holocubes into an array, with uniq
     }
 }
 if(first()) {
-    Speed = 5
+    Speed = 0
     Scale = 20
     createHolos()
 }

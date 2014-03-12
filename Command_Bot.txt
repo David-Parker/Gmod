@@ -1,3 +1,4 @@
+# Created by Teh Lawler
 @name Command Bot
 @inputs 
 @outputs 
@@ -20,10 +21,15 @@ function void player_not_found() {
     concmd("say ["+Name+"]: Player not found.")
 }
 
+function void help() {
+   concmd("say ["+Name+"]: Welcome to "+Name+", for a list of commands type !cb commands.") 
+}
+
 #------------------------------END of Initial Functions-----------------------------------#
 
 if(first()) {
     Name = "CommandBot"
+    help()
     Origin = owner():pos()#vec(1000,1000,1000)
     entity():setPos(Origin)
     entity():setMaterial("sprites/physbeam")
@@ -35,7 +41,7 @@ function void set_hat(Target:string) {
     if(Player:name() != "") {
         UpdateHat = 1
         HatTarget = Player
-        concmd("say ["+Name+"]: " + Player:name() + " has had a hat placed on him!")
+        concmd("say ["+Name+"]: " + Player:name() + " has had the hat placed on him!")
     }
     else {
         player_not_found()
@@ -52,12 +58,8 @@ function void player_list(LastSaidL:string) {
     concmd("say ["+Name+"]: " + String)
 }
 
-function void help() {
-   concmd("say ["+Name+"]: Welcome to "+Name+", for a list of commands type !cb commands.") 
-}
-
 function void commands() {
-   concmd("say ["+Name+"]: !cb help, players, health [player], hat [player/off].") 
+   concmd("say ["+Name+"]: !cb help, players, health [player], hat [player/off], credit.") 
 }
 
 function void health_player(Target:string) {
@@ -78,9 +80,13 @@ function void remove_hat() {
     concmd("say ["+Name+"]: " + "The hat has been removed.")
 }
 
+function void play_song(Number:string) {
+    # TO:DO
+}
+
 #---------------------------END OF FUNCTION DEFINITIONS-------------------------------#
 
-interval(500)
+interval(100)
 if(clk()) {
     LastSaidL = lastSaid() #makes lastSaid lower-case
     if(LastSaidL == "!cb players") {
@@ -102,6 +108,13 @@ if(clk()) {
     elseif(LastSaidL:sub(1,7) == "!cb hat") {
         Target = LastSaidL:sub(8,LastSaidL:length())
         set_hat(Target)
+    }
+    elseif(LastSaidL == "!cb credit") {
+        concmd("say ["+Name+"]: "+Name+" was created by Teh Lawler.")
+    }
+    elseif(LastSaidL:sub(1,7) == "!cb song") {
+        Number = LastSaidL:sub(8,LastSaidL:length())
+        play_song(Number) # TO:DO
     }
     
     if(UpdateHat) {

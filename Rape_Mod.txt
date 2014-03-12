@@ -1,3 +1,4 @@
+#Created by Teh Lawler
 @name Rape Mod
 @inputs 
 @outputs 
@@ -6,7 +7,7 @@
 
 interval(700)
 if(first()) {
-    concmd("say [RapeMod]: RapeMod initialized, type !rape help for more info.")
+    #concmd("say [RapeMod]: RapeMod initialized, type !rape help for more info.")
     Origin = vec(1000,1000,1000)
     entity():setPos(Origin)
     Over = 0 # Is the rape over?

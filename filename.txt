@@ -3,14 +3,10 @@
 @outputs 
 @persist 
 @trigger 
-@model models/props_junk/watermelon01.mdl
-
-interval(1000) # In miliseconds, 1000 = 1 second
 
 if(first()) {
-    #Declare data here
+    holoCreate(1)
+    holoPos(1,entity():pos() + vec(0,0,50))
+    holoModel(1,"hq_sphere")
+    holoScale(1,vec(-3,-3,-3))
 }
-if(clk()) { # Better to use than runontick for lag reasons
-    print("Hey Waffle")
-}
-

@@ -43,7 +43,7 @@ if(first()) { # Initialize the ball default settings
     Ball_Size = 2
     Ang = 0
     Speed = 50
-    Target = findPlayerByName("kill")
+    Target = findPlayerByName("lawl")
     Radius = 100
     Pos = Target:pos()
     ballCreate(Balls)

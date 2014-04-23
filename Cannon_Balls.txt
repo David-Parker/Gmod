@@ -47,7 +47,7 @@ if(first()) {
     Balls = 11
     Ang = 0
     Speed = 8
-    Target = findPlayerByName("zeroco")
+    Target = findPlayerByName("lawler")
     Radius = 50
     Pos = Target:pos()
     ballCreate(Balls)

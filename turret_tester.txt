@@ -1,0 +1,34 @@
+@name turret tester
+@inputs 
+@outputs Fire 
+@persist Target:entity E:entity Run 
+interval(110) # Time in miliseconds to tick
+  
+LastSaid=owner():lastSaid():explode(" ")
+if (LastSaid[1,string]=="!target") {
+	Target=findPlayerByName(LastSaid[2,string])
+}
+if (first() | duped()) {
+    E = entity():isWeldedTo() # Only needs to be initialized once, makes E whatever the e2 chip is attached to.
+    Run = 0
+}
+    
+if (owner():keyAttack2()) {
+	Fire=1
+} 
+else {
+	Fire=0
+}
+if (owner():lastSaid()=="!off") {
+	Run = 0
+} 
+elseif (LastSaid[1,string]=="!target") {
+	Target=findPlayerByName(LastSaid[2,string])
+	Run = 1
+}
+if(Run){
+ Vec = Target:pos() - E:pos() + vec(0,0,15)
+ Ang = Vec:toAngle()
+	E:setAng(Ang)
+	E:setPos(owner():shootPos()+vec(0,0,50))
+}

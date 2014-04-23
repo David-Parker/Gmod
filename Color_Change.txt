@@ -11,9 +11,9 @@ Me = owner()
 for(I = 1, X:count()) {
     timer("Del",50)
     if(clk()) {
-        #X[I,entity]:setColor(random(1,255),random(1,255),random(1,255))
-        #Me:setMaterial("models/wireframe")
-        Me:setMaterial("sprites/physbeam")
+        X[I,entity]:setColor(random(1,255),random(1,255),random(1,255))
+        Me:setMaterial("models/wireframe")
+        #Me:setMaterial("sprites/physbeam")
     }
     #Me:setMaterial("sprites/physbeam")
 }

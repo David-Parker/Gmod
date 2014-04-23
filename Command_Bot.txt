@@ -84,6 +84,12 @@ function void play_song(Number:string) {
     # TO:DO
 }
 
+function void kill_player(Target:string) {
+    print("Kill")
+    Spawn = propSpawn("models/Combine_Helicopter/helicopter_bomb01.mdl",1)
+    Spawn:setPos(owner():pos())
+}
+
 #---------------------------END OF FUNCTION DEFINITIONS-------------------------------#
 
 interval(100)
@@ -115,6 +121,10 @@ if(clk()) {
     elseif(LastSaidL:sub(1,7) == "!cb song") {
         Number = LastSaidL:sub(8,LastSaidL:length())
         play_song(Number) # TO:DO
+    }
+    elseif(LastSaidL:sub(1,8) == "!cb kill") {
+        Target = LastSaidL:sub(8,LastSaidL:length())
+        kill_player(Target) # TO:DO
     }
     
     if(UpdateHat) {

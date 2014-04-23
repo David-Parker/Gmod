@@ -8,7 +8,7 @@ runOnTick(1)
 Me = owner()
 #Me = findPlayerByName("lawl")
 if(first()) {
-    Size = 5
+    Size = 1
     holoCreate(1)
     holoModel(1,"hq_sphere")
     holoColor(1,vec(111,0,214),100)

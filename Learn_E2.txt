@@ -1,0 +1,17 @@
+@name Learn_E2
+@inputs 
+@outputs 
+@persist Target:entity Vec:vector
+@trigger 
+  
+  interval(100) # Execute the script ever x miliseconds
+  if(first() | duped()) { # Initialize stuff here
+	  Target = findPlayerByName("lawler")
+      holoCreate(1)
+      holoModel(1,"cube")
+	  holoColor(1,vec(255,50,255))	
+}						
+holoPos(1,entity():pos() + vec(0,0,70))
+Vec = Target:pos() - entity():pos()
+Ang = Vec:toAngle()
+holoAng(1,Ang)

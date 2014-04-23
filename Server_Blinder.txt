@@ -4,7 +4,7 @@
 @outputs 
 @persist Speed Scale
 @trigger 
-runOnTick(1)
+interval(1)
 X = players()
 function void createHolos() { # Serialize the holocubes into an array, with unique ID's for each player
     for(I = 1, X:count()) {

@@ -1,0 +1,19 @@
+@name Vector Info
+@inputs Anchor:entity
+@outputs 
+@persist 
+@trigger 
+Target = entity()
+runOnTick(1)
+timer("Delay",200)
+if(clk("Delay")) {
+    I = 0
+    while(I < 10) {
+        print("\n")
+        I++
+    }
+    print("Normal: " + toString(Target:pos()))
+    print("World: " + toString(Target:toWorld(Target:pos())))
+    Target:toLocal(Target:pos())
+    print("Local: " + toString(Target:toLocal(Anchor:pos())))
+}

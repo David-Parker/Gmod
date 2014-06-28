@@ -1,0 +1,25 @@
+@name v8
+@inputs GPS:vector On Throttle
+@outputs RPM T1 T2 T3 T4 Torque:vector
+@persist A B C T Bearing
+@model models/mechanics/wheels/wheel_smooth_24.mdl
+
+runOnTick(1)
+
+if(Throttle){T=10}else{T=1}
+
+RPM=abs(entity():angVel():yaw()/6)
+Torque = entity():angVelVector()
+A=On*C*T
+B=-A
+C=1
+Bearing=entity():bearing(GPS)
+
+if(Bearing>-180&Bearing<0){T2=B}else{T2=A}
+T1=-T2
+
+if(Bearing>-60&Bearing<120){T3=B}else{T3=A}
+T4=-T3
+
+if(first()){soundPlay(0,0,"acf_engines/v8_petrol.wav")}
+soundPitch(0,RPM/7)

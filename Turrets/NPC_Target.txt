@@ -1,0 +1,41 @@
+@name NPC_Target_Explode
+@inputs 
+@outputs Fire
+@persist Turret:entity Target:entity Start Ticks N
+@trigger 
+
+if(first() | duped()) {
+    Turret = entity():isWeldedTo()
+    Start = 0
+    Ticks = 10
+}
+
+if(owner():keyAttack2()) {
+    Start = 1
+}
+interval(50)
+if(Ticks >= N) {
+    N = findByClass("npc_*")
+    Ticks = 0
+}
+
+Target = findResult(N)
+N--
+
+if(Start) {
+    Vec = Target:pos() - entity():pos()
+    Angle = Vec:toAngle()
+    #Turret:setAng(Angle)
+    #Turret:setPos((owner():pos() + vec(0,0,80)))
+    Turret:setPos(Target:pos())
+}
+
+if(Target:isAlive() & Start) {
+    Fire = 1
+}
+else {
+    Fire = 0
+}
+Ticks++
+
+

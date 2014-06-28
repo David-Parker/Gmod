@@ -1,9 +1,19 @@
-@name 
+@name Gravity
 @inputs 
 @outputs 
-@persist 
+@persist Target:entity Acc Speed TV
 @trigger 
-
+interval(10)
+if(first()) {
+    Acc = 0
+    Speed = 2
+    TV = 200
+    Target = entity():isWeldedTo()
+}
+if(!(Acc >= TV)) {
+    Acc += Speed
+}
+Target:setPos(Target:pos() - vec(0,0,Acc/10))
 #[
     Scopes have been added. If you find any bugs,
     please report them on the forums.

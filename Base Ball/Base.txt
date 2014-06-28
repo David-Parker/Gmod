@@ -1,9 +1,14 @@
-@name 
+@name Base
 @inputs 
-@outputs 
+@outputs Base:entity
 @persist 
 @trigger 
+@model models/hunter/plates/plate05x05.mdl
 
+if(first() | duped()) {
+    Base = entity():isWeldedTo()
+    entity():setAlpha(0)
+}
 #[
     Scopes have been added. If you find any bugs,
     please report them on the forums.

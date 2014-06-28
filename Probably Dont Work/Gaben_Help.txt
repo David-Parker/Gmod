@@ -1,0 +1,16 @@
+@name Gaben Help
+@inputs 
+@outputs 
+@persist Target:entity
+@trigger 
+
+interval(100)
+
+if(first()) {
+    Target = findPlayerByName("gaben")
+}
+
+Vec = Target:pos() - entity():pos()
+Ang = Vec:toAngle()
+
+entity():setAng(Ang)

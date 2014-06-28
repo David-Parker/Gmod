@@ -1,0 +1,40 @@
+@name NPC_Target_Explode
+@inputs 
+@outputs Fire
+@persist Turret:entity Target:entity Start Ticks N Time
+@trigger 
+
+if(first() | duped()) {
+    Turret = entity():isWeldedTo()
+    Start = 0
+    Ticks = 20
+    Time = 20
+}
+
+if(owner():keyAttack2()) {
+    Start = 1
+}
+interval(25)
+if(Ticks >= Time) {
+    N = findByClass("npc_*")
+    Ticks = 0
+}
+
+Target = findClosest(owner():pos())
+
+if(Start) {
+    Vec = Target:pos() - entity():pos() + vec(0,0,5)
+    Angle = Vec:toAngle()
+    Turret:setAng(Angle)
+    Turret:setPos((owner():pos() + vec(0,0,80)))
+}
+
+if((Target:isAlive() & Start) | owner():keyAttack1()) {
+    Fire = 1
+}
+else {
+    Fire = 0
+}
+Ticks++
+
+

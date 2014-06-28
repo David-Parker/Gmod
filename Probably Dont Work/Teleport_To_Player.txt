@@ -1,9 +1,10 @@
-@name 
+@name Teleport_To_Player
 @inputs 
 @outputs 
 @persist 
 @trigger 
 
+owner():setPos(vec(0,0,0))
 #[
     Scopes have been added. If you find any bugs,
     please report them on the forums.

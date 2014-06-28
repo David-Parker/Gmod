@@ -1,0 +1,36 @@
+@name Prop Follower #Created by Teh Lawler
+@inputs Up Forward
+@outputs 
+@persist Chat Go Target:entity TargetS:string LastSaidL:string E:entity
+@trigger
+if(first() | duped()) {
+    E = entity():isWeldedTo()
+}
+if(Chat == 0) {
+    runOnChat(1)
+    LastSaidL=owner():lastSaid():lower() #makes lastSaid lower-case
+ 
+    if (LastSaidL:sub(1,8)=="/target ") {
+       TargetS=LastSaidL:sub(9,LastSaidL:length())
+    } 
+    if (TargetS!="") {
+        Target=findPlayerByName(TargetS)
+        Chat = 1
+        runOnTick(1)
+    }
+} 
+
+elseif(Chat == 1) {
+    LastSaidL=owner():lastSaid():lower() #makes lastSaid lower-case
+    if (LastSaidL=="/stop") {
+        Chat = 0
+    } 
+    runOnTick(1)
+    O = Target
+    Cur = E:pos()
+    Goto = O:pos() + vec(0,0,100)
+    Vec = Goto - Cur
+    E:applyForce((Vec)*E:mass()/4)
+}
+
+

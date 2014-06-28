@@ -1,0 +1,135 @@
+# Created by Teh Lawler
+@name Command Bot
+@inputs 
+@outputs 
+@persist Name:string HatTarget:entity UpdateHat 
+@trigger 
+
+function void create_hat() {
+    Pos = vec(10000,10000,10000)
+    R = 2
+    B = 10
+    G = 100
+    holoCreate(1,Pos,vec(1.8,1.8,1.5),ang(0,0,0),vec(R,G - 10 ,B)) # Brim
+    holoCreate(2,Pos + vec(0,0,8),vec(1.1,1.1,1.1),ang(0,0,0),vec(R,G,B)) 
+    holoModel(1,"hq_torus_thick")
+    holoModel(2,"hq_rcylinder_thin") 
+    UpdateHat = 0
+}
+
+function void player_not_found() {
+    concmd("say ["+Name+"]: Player not found.")
+}
+
+function void help() {
+   concmd("say ["+Name+"]: Welcome to "+Name+", for a list of commands type !cb commands.") 
+}
+
+#------------------------------END of Initial Functions-----------------------------------#
+
+if(first()) {
+    Name = "CommandBot"
+    help()
+    Origin = owner():pos()#vec(1000,1000,1000)
+    entity():setPos(Origin)
+    entity():setMaterial("sprites/physbeam")
+    create_hat()
+}
+
+function void set_hat(Target:string) {
+    Player = findPlayerByName(Target:sub(2,Target:length()))
+    if(Player:name() != "") {
+        UpdateHat = 1
+        HatTarget = Player
+        concmd("say ["+Name+"]: " + Player:name() + " has had the hat placed on him!")
+    }
+    else {
+        player_not_found()
+    }
+}
+
+function void player_list(LastSaidL:string) {
+    LastSaidL = ""
+    X = players()
+    String = "Players - "
+    for(I = 1, X:count()) {
+        String += "[" + I + "]: " + X[I,entity]:name() + " "
+    } 
+    concmd("say ["+Name+"]: " + String)
+}
+
+function void commands() {
+   concmd("say ["+Name+"]: !cb help, players, health [player], hat [player/off], credit.") 
+}
+
+function void health_player(Target:string) {
+    Player = findPlayerByName(Target:sub(2,Target:length())) # Weird hack for fixing non string-literal searches
+    #print(findPlayerByName("bot"):name())
+    if(Player:name() != "") {
+        concmd("say ["+Name+"]: " + Player:name() + "'s health is " +Player:health())
+    }
+    else {
+        player_not_found()
+    }
+}
+
+function void remove_hat() {
+    UpdateHat = 0
+    holoPos(1,Origin)
+    holoPos(2,Origin)
+    concmd("say ["+Name+"]: " + "The hat has been removed.")
+}
+
+function void play_song(Number:string) {
+    # TO:DO
+}
+
+function void kill_player(Target:string) {
+    print("Kill")
+    Spawn = propSpawn("models/Combine_Helicopter/helicopter_bomb01.mdl",1)
+    Spawn:setPos(owner():pos())
+}
+
+#---------------------------END OF FUNCTION DEFINITIONS-------------------------------#
+
+interval(100)
+if(clk()) {
+    LastSaidL = lastSaid() #makes lastSaid lower-case
+    if(LastSaidL == "!cb players") {
+        player_list(LastSaidL)
+    }
+    elseif(LastSaidL == "!cb help") {
+        help()
+    }
+    elseif(LastSaidL == "!cb commands") {
+        commands()
+    }
+    elseif(LastSaidL:sub(1,10) == "!cb health") {
+        Target = LastSaidL:sub(11,LastSaidL:length())
+        health_player(Target)
+    }
+    elseif(LastSaidL == "!cb hat off") {
+        remove_hat()
+    }
+    elseif(LastSaidL:sub(1,7) == "!cb hat") {
+        Target = LastSaidL:sub(8,LastSaidL:length())
+        set_hat(Target)
+    }
+    elseif(LastSaidL == "!cb credit") {
+        concmd("say ["+Name+"]: "+Name+" was created by Teh Lawler.")
+    }
+    elseif(LastSaidL:sub(1,7) == "!cb song") {
+        Number = LastSaidL:sub(8,LastSaidL:length())
+        play_song(Number) # TO:DO
+    }
+    elseif(LastSaidL:sub(1,8) == "!cb kill") {
+        Target = LastSaidL:sub(8,LastSaidL:length())
+        kill_player(Target) # TO:DO
+    }
+    
+    if(UpdateHat) {
+        holoPos(1,HatTarget:pos() + vec(0,0,70))
+        holoPos(2,HatTarget:pos() + vec(0,0,70 + 8))
+    }
+}
+

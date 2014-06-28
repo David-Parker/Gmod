@@ -1,0 +1,28 @@
+# Created by Teh Lawler
+@name Base_Ball_Score_Board
+@inputs Printer:wirelink Score:table
+@outputs 
+@persist 
+@trigger 
+
+interval(1000)
+function void clearScreen() {
+    Printer[2041] = 1
+}
+if(first() | duped()) {
+    Printer:writeString("      INITIALIZING",0,0,900,0)
+}
+if(clk()) {
+    clearScreen()
+    Printer[2042] = 111 # Background Color
+    X = players()
+    Color = 147
+    Printer:writeString("Base Ball Score Board",0,0,Color,0)
+    Color = 999
+    for(I = 1, X:count()) {
+        Player = X[I,entity]
+        if(Score:exists(Player:name())) {
+            Printer:writeString(Player:name() + ": " + Score[Player:name(),number],0,I + 1,Color,0)
+        }
+    }
+}

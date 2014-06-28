@@ -1,0 +1,92 @@
+#Created by Teh Lawler
+@name Catch
+@inputs 
+@outputs 
+@persist Ball:entity Holder:entity Held Radius NIL:entity Time Force Last_Holder:entity Solid Bat:string Glove:string
+@trigger 
+
+#---------------------------FUNCTIONS---------------------------
+
+function number check_bounds(Pos:vector, Target:entity) {
+    Bound = 70
+    Distance_x = Pos:x() - Target:pos():x()
+    Distance_y = Pos:y() - Target:pos():y()
+    Distance_z = Pos:z() - Target:pos():z()
+    if(abs(Distance_x) <= Bound & abs(Distance_y) <= Bound & abs(Distance_z) <= Bound + 20) {
+        return 1
+    }
+    return 0
+}
+
+function void check_catch() {
+    # Check if any player is near the ball
+    for(I = 0, players():count()) {
+        Player = players()[I,entity]
+        if(check_bounds(Player:pos(), Ball)) {
+            #print(Player:name())
+            Holder = Player
+            Held = 1
+        }
+    }
+}
+
+function vector ball_position() {
+    Ang =  Holder:eyeAngles():yaw()
+    Xpos = Radius*cos(Ang)
+    Ypos = Radius*sin(Ang)
+    Zpos = 50
+    return vec(Xpos,Ypos,Zpos)
+}
+
+#------------------------------CODE------------------------------
+
+interval(20)
+
+if(first() | duped()) {
+    Ball = propSpawn("models/dav0r/hoverball.mdl",0)
+   # Ball:propNotSolid(1)
+    Ball:setPos(entity():pos() + vec(0,0,50))
+    Held = 0
+    Radius = 50
+    Time = 10
+    Force = 1000
+    Bat = "models/weapons/w_crowbar.mdl"
+    Glove = "models/weapons/w_Physics.mdl"
+    #Ball:propGravity(0)
+}
+
+# Ball is currently free and not in a player's hands.
+if(!Held) {
+    Ball:propNotSolid(0)
+    Ball:propGravity(1)
+    Solid = 0
+    if(Time >= 4) {
+       check_catch()
+    }
+}
+# A player holds the ball, what does he want to do with it?
+else {
+    if(!Solid) {
+        Ball:propNotSolid(1)
+        Ball:propGravity(0)
+        Sold = 1
+    }
+    Ball:setPos(Holder:pos() + ball_position())
+    
+    if(Holder:keyAttack1()) {
+        Force = 1500
+        Ball:applyForce(Holder:eye() * Force * Ball:mass())
+        Holder = NIL
+        Held = 0
+        Time = 0
+    }
+    elseif(Holder:keyAttack2()) {
+        Force = 2000
+        Ball:applyForce(Holder:eye() * Force * Ball:mass())
+        Holder = NIL
+        Held = 0
+        Time = 0
+    }
+}
+Time++
+

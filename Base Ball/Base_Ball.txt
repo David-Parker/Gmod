@@ -1,0 +1,182 @@
+# Created by Teh Lawler
+@name Base_Ball
+@inputs Base1:entity Base2:entity Base3:entity BaseHome:entity
+@outputs Score:table
+@persist Ball:entity Holder:entity Held Radius NIL:entity Time Force Last_Holder:entity Solid Bat:string Glove:string Bases:array Batters:table Running:table
+@trigger 
+
+if(first() || duped()) {
+    
+#---------------------------FUNCTIONS---------------------------
+function void new_game() {
+    Time = 0
+    concmd("say [Base Ball]: Starting a new game!")
+    Holder = NIL
+    Batters:clear()
+    Running:clear()
+    Score:clear()
+    Ball:propDelete()
+    Ball = propSpawn("models/dav0r/hoverball.mdl",0)
+    Ball:setPos(entity():pos() + vec(0,0,50))
+    Held = 0
+}
+function number check_bounds(Pos:vector, Target:entity, Bound) {
+    Distance_x = Pos:x() - Target:pos():x()
+    Distance_y = Pos:y() - Target:pos():y()
+    Distance_z = Pos:z() - Target:pos():z()
+    if(abs(Distance_x) <= Bound & abs(Distance_y) <= Bound & abs(Distance_z) <= Bound + 20) {
+        return 1
+    }
+    return 0
+}
+
+function void check_catch() {
+    # Check if any player is near the ball
+    for(I = 0, players():count()) {
+        Player = players()[I,entity]
+        if(check_bounds(Player:pos(), Ball, 70) && Player:weapon():model() == Glove) {
+            #print(Player:name())
+            Holder = Player
+            Held = 1
+        }
+    }
+}
+
+function void check_bat() {
+    # Check if any player has hit the ball
+    for(I = 0, players():count()) {
+        Player = players()[I,entity]
+        if(check_bounds(Player:pos(), Ball, 90) && Player:weapon():model() == Bat && Player:keyAttack1()) {
+            Batters[Player:name(),number] = 0
+            Ball:applyForce(Player:eye() * Force * Ball:mass())
+            # Print out that the player hit the ball
+        }
+    }
+}
+
+function void update_base(Player:entity, Base_num:number) {
+    Batters[Player:name(),number] = Base_num
+    On_base_number = Batters[Player:name(),number]
+    Running[Player:name(),number] = 0
+    #print(Player:name() + " is on base " + On_base_number)
+}
+
+function number check_player_on_base(Player:entity) {
+    Range = 75
+    for(I = 1, 3) {
+       if((check_bounds(Player:pos(), Bases[I,entity], Range) && Batters[Player:name(),number] == I - 1) ||
+          (check_bounds(Player:pos(), Bases[I,entity], Range) && Batters[Player:name(),number] == I ) ||
+          (check_bounds(Player:pos(), Bases[I,entity], Range) && Running[Player:name(),number] == 0)) {
+            update_base(Player, I)
+            return 1
+        } 
+    }
+    return 0
+}
+
+function void check_base() {
+    for(I = 1,players():count()) {
+        Player = players()[I,entity]
+        if(Batters:exists(Player:name())) {
+            #if(Running[Player:name(),number] == 1){print(Player:name() + " is running!")}
+            if(check_player_on_base(Player)){}
+            elseif(check_bounds(Player:pos(), Bases[4,entity], 40) && Batters[Player:name(),number] == 3) {
+                update_base(Player, 4)
+                concmd("say [Base Ball]: " + Player:name() + " scored a run!")
+                Score[Player:name(), number] = Score[Player:name(), number] + 1
+                Batters:remove(Player:name())
+                Running:remove(Player:name())
+            }
+            else {
+                # The player is off base, let him be able to be tagged but remember which base he was on
+                Running[Player:name(),number] = 1
+            }
+        }
+    }
+}
+
+function vector ball_position() {
+    Ang =  Holder:eyeAngles():yaw()
+    Xpos = Radius*cos(Ang)
+    Ypos = Radius*sin(Ang)
+    Zpos = 50
+    return vec(Xpos,Ypos,Zpos)
+}
+
+function void set_bases() {
+    Bases[1,entity] = Base1
+    Bases[2,entity] = Base2
+    Bases[3,entity] = Base3
+    Bases[4,entity] = BaseHome
+}
+
+function void check_outs() {
+    for(I = 1,players():count()) {
+        Player = players()[I,entity]
+        if(Batters:exists(Player:name())) {
+            if(check_bounds(Player:pos(), Holder, 65) && Running[Player:name(),number] == 1) {
+                concmd("say [Base Ball]: " + Player:name() + " is out!")
+                Batters:remove(Player:name())
+                Running:remove(Player:name())
+            }
+        }
+    }
+}
+#------------------------END OF FUNCTIONS------------------------
+Bases = array()
+Batters = table()
+Running = table()
+Score = table()
+new_game()
+Radius = 50
+Time = 10
+Force = 1500
+Bat = "models/weapons/w_crowbar.mdl"
+Glove = "models/weapons/w_Physics.mdl"
+}
+
+interval(50)
+
+# Setting the positions of all the bases
+set_bases()
+
+if(owner():lastSaid() == "!newgame" && Time >= 25) {
+    new_game()
+}
+elseif(owner():lastSaid() == "!reset ball" && Time >= 25) {
+    concmd("say [Base Ball]: Ball reset!")
+    Time = 0
+    Ball:setPos(entity():pos() + vec(0,0,50))
+}
+
+# Ball is currently free and not in a player's hands.
+if(!Held) {
+    Ball:propNotSolid(0)
+    Ball:propGravity(1)
+    Solid = 0
+    if(Time >= 5) {
+       check_catch()
+       check_bat()
+       check_base()
+    }
+}
+# A player holds the ball, what does he want to do with it?
+else {
+    if(!Solid) {
+        Ball:propNotSolid(1)
+        Ball:propGravity(0)
+        Solid = 1
+    }
+    
+    Ball:setPos(Holder:pos() + ball_position())
+    if(Holder:keyAttack1()) {
+        Ball:applyForce(Holder:eye() * Force * Ball:mass())
+        Holder = NIL
+        Held = 0
+        Time = 0
+    }
+    check_base()
+    check_outs()
+}
+Time++
+

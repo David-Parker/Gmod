@@ -1,0 +1,102 @@
+#Created by Teh Lawler
+@name Rape Mod
+@inputs 
+@outputs 
+@persist LastSaidL:string Target:entity NewTarg Time Origin:vector Over
+@trigger 
+
+interval(700)
+if(first()) {
+    concmd("say [RapeMod]: RapeMod initialized, type !rape help for more info.")
+    Origin = vec(1000,1000,1000)
+    entity():setPos(Origin)
+    Over = 0 # Is the rape over?
+    Time = 0 # Time elapsed for the current rape
+    NewTarg = 0 # Should a new target be selected?
+    
+    entity():setMaterial("sprites/physbeam")
+    Target = entity()
+    
+    ## Left Testicle
+    holoCreate(1)
+    holoColor(1,vec(255,50,155))
+    holoModel(1,"sphere3")
+    holoScale(1,vec(2,2,2))
+    
+    ## Right Testicle
+    holoCreate(2)
+    holoColor(2,vec(255,50,155))
+    holoModel(2,"sphere3")
+    holoScale(2,vec(2,2,2))
+    
+    ## Shaft
+    holoCreate(3)
+    holoColor(3,vec(255,50,155))
+    holoModel(3,"cylinder")
+    holoScale(3,vec(1.7,1.7,2.5))
+    holoAng(3,ang(0,0,0))
+    
+    ## Tip
+    holoCreate(4)
+    holoColor(4,vec(255,70,175))
+    holoModel(4,"sphere3")
+    holoScale(4,vec(2,2,2))
+}
+if(clk()) {
+    if(Target != entity()) {
+        Time++
+    }
+    else {
+        Time = 0
+    }
+    if(Time == 30) {
+        Over = 1
+        Time = 0
+        concmd("say [RapeMod]: " + Target:name()+"'s rape has ended!")
+        Target = entity()
+    }
+    entity():soundPlay(1,500,"weapons/bugbait/bugbait_impact1.wav")
+    LastSaidL = lastSaid() #makes lastSaid lower-case
+    if(LastSaidL == "!rape help") {
+        LastSaidL = ""
+        concmd("say [RapeMod]: Typing !rape [target] places a penis on a target and rapes him.")
+    }
+    elseif(LastSaidL == "!rape credit") {
+        LastSaidL = ""
+        concmd("say [RapeMod]: RapeMod was created by Teh Lawler.")
+    }
+    if (LastSaidL:sub(1,6)=="!rape ") {
+        TargetS = LastSaidL:sub(7,LastSaidL:length())
+        Temp = findPlayerByName(TargetS)
+        if(Temp:name() != "") {
+            NewTarg = 1
+        }
+        else {
+            NewTarg = 0
+            concmd("say [RapeMod]: Player not found!")
+        }
+    }
+    if(lastSpoke() == Target && lastSaid():sub(1,5)=="!rape") {
+        NewTarg = 0
+        concmd("say [RapeMod]: You cannot use !rape, while you are being raped!")
+    }
+    if (NewTarg) {
+        Time = 0
+        Target = findPlayerByName(TargetS)
+        NewTarg = 0
+        concmd("say [RapeMod]: "+Target:name() +" is now being raped for 15s!, he cannot use !rape")
+    } 
+    if(Over) {
+        entity():setPos(Origin)
+        Over = 0
+    }
+    else {
+        entity():setPos(Target:pos())
+    }
+    holoPos(1,Target:pos()+vec(-20,0,25))
+    holoPos(2,Target:pos()+vec(25,0,25))
+    holoPos(3,Target:pos()+vec(0,0,80))
+    holoPos(4,Target:pos()+vec(0,0,120))
+}
+
+

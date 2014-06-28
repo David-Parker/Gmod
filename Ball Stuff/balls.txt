@@ -1,0 +1,62 @@
+@name Balls
+@inputs 
+@outputs 
+@persist Pos:vector Ang OldPos:vector Radius Target:entity Speed Balls Color:vector R G B ColorNum Ball_Size
+@trigger 
+interval(100)
+
+function void updateBall(BallID,Offset) { # Update the ball's position and color information
+    Ang += Offset
+    X = Radius*cos(Ang)
+    Y = Radius*sin(Ang)
+    Z = (Radius*sin(Ang)) * (Radius/200*sin(Ang))
+    holoPos(BallID,Target:pos() + vec(X,Y,Z))
+    holoColor(BallID,Color)
+    Ang -= Offset
+}
+
+function void updates(NumOfBalls) { # Update all the balls and pass offset information
+    I = 1
+    while(I < NumOfBalls + 1) {
+        updateBall(I,360/Balls*I)
+        I++
+    }
+}
+
+function void ballCreate(NumOfBalls) { # Initialize all the balls
+    I = 1
+    while(I < NumOfBalls + 1) {
+        holoCreate(I,Pos,vec(Ball_Size,Ball_Size,Ball_Size),ang(0,0,0),Color,"hqsphere")
+        holoAlpha(I,180)
+        holoRenderFX(I,0)
+        I++
+    }
+}
+    
+if(first()) { # Initialize the ball default settings
+    ColorNum = 2
+    R = 0
+    G = 250
+    B = 250
+    Color = vec(R,G,B)
+    Balls = 10
+    Ball_Size = 2
+    Ang = 0
+    Speed = 50
+    Target = findPlayerByName("lawler")
+    Radius = 100
+    Pos = Target:pos()
+    ballCreate(Balls)
+}
+
+Ang += Speed/10
+if(G > 252 || G <= 0) { # Reverse the color decay direction
+    ColorNum = -ColorNum
+}
+G+=ColorNum
+Color = vec(R,G,B)
+updates(Balls)
+
+
+
+

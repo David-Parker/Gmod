@@ -1,0 +1,42 @@
+#Created by Teh Lawler
+@name Follower
+@inputs 
+@outputs 
+@persist Target:entity Rad RadS Rad2 TargetS:string LastSaidL:string Black:vector Pink:vector
+Rad = 5
+Rad2 = 2
+RadS = 15
+runOnTick(1)
+ #searches the player
+#Minor Fix - Bayangan (12/07/2010)
+##print(Target:name()+" has had a dildo placed on him!")
+Me=owner()
+if(first()){
+    Black = vec(66,40,15)
+    Pink = vec(250,140,190)
+    Target=findPlayerByName("lawl")
+}
+Angle = ang(Target:eyeAngles():pitch()+90, 
+        Target:eyeAngles():yaw(), 
+        Target:eyeAngles():roll())
+
+## Left Testicle
+holoCreate(1)
+holoColor(1,Pink)
+holoModel(1,"sphere3")
+holoPos(1,Target:pos()+vec(0,0,30) + vec(Target:eye():x()*Rad,Target:eye():y()*Rad,0))
+holoScale(1,vec(1,1,1))
+
+
+
+## Shaft
+holoCreate(3)
+holoColor(3,Pink)
+holoModel(3,"cylinder")
+holoPos(3,Target:pos()+vec(0,0,35) + Target:eye()*RadS)
+holoScale(3,vec(0.75,0.75,1.2))
+holoAng(3,Angle)
+
+
+
+

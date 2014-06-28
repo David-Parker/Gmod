@@ -1,9 +1,0 @@
-@name 
-@inputs 
-@outputs 
-@persist 
-@trigger 
-
-print(owner():pos())
-
-1531 -218

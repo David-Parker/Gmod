@@ -1,8 +1,0 @@
-@name 
-@inputs 
-@outputs 
-@persist 
-@trigger 
-interval(200)
-entity():setAlpha(0)
-entity():isWeldedTo():setColor(vec(random(1,255),random(1,255),random(1,255)))

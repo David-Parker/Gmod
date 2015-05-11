@@ -1,0 +1,42 @@
+@name Vehicle Replay
+@inputs 
+@outputs 
+@persist Position:array Angle:array Velocity:array Record Replay Vehicle:entity Last_Vel:vector
+@trigger 
+
+interval(5)
+if(first() | duped()) {
+    Position = array()
+    Record = 1
+    Replay = 0
+}
+Vehicle = owner():vehicle()
+if(owner():inVehicle() & Record) {
+    Position:pushVector(Vehicle:pos())
+    Angle:pushAngle(Vehicle:angles())
+    Velocity:pushVector(Vehicle:vel())
+}
+
+if(owner():keyReload()) {
+    Record = 0
+    Replay = 1
+}
+else {
+    if(Replay) {
+        Vehicle:applyForce(vec(0,0,0) * Vehicle:mass())
+        Vehicle:applyForce(Last_Vel * Vehicle:mass())
+    }
+    Record = 1
+    Replay = 0
+}
+
+if(Replay & (Position:count() >= 1)) {
+    Last_Vel = Velocity:popVector()
+    Vehicle:setPos(Position:popVector() + vec(0,0,1))
+    Vehicle:setAng(Angle:popAngle())
+}
+elseif(Position:count() < 1) {
+    Record = 1
+    Replay = 0
+}
+

@@ -1,1 +1,0 @@
-expression2/NPC_Target_Explode.txt;expression2/NPC_Target.txt;expression2/Dynamite_follower.txt

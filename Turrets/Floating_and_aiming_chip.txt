@@ -10,7 +10,7 @@ if(Bool) {
     Target = entity():isWeldedTo()
     Angle = Me:eyeAngles() 
     Target:setAng(Angle)
-    Target:setPos((Me:pos() + vec(0,0,80)))
+    #Target:setPos((Me:pos() + vec(0,0,80)))
 }
 if(Me:keyAttack1()) {
     Fire = 1

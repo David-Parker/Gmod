@@ -1,45 +1,85 @@
-@name Ball Shooter
+#Created by Teh Lawler (https://github.com/David-Parker/Gmod)
+@name Parametric Prop Spawner
 @inputs 
 @outputs 
-@persist Target:entity Ball:entity Nil:entity Force Has_ball
+@persist Target:entity Size I Origin:vector Offset Num End Radius Ang R G B
 @trigger 
 
-interval(100)
-if(first() | duped()) {
+interval(300) 
+function void prop_spawner(Pos:vector) {
+    Spawn = propSpawn("models/hunter/blocks/cube05x05x05.mdl",1)
+    Spawn:setPos(Pos)
+    Spawn:setColor(vec(R,G,B))
     
-function void create_ball() {
-    Ball = Nil
-    Ball = propSpawn("models/dav0r/hoverball.mdl",0)
-    Ball:setPos(Target:pos())
-    Ball:propGravity(0)
-    Ball:setMaterial("debug/env_cubemap_model")
-    Has_ball = 1
-}
-
-function number check_bounds(Pos:vector, Target:entity, Bound) {
-    Distance_x = Pos:x() - Target:pos():x()
-    Distance_y = Pos:y() - Target:pos():y()
-    Distance_z = Pos:z() - Target:pos():z()
-    if(abs(Distance_x) <= Bound & abs(Distance_y) <= Bound & abs(Distance_z) <= Bound + 20) {
-        return 1
+    # Really bad rainbow logic
+    #Start R = 255 B = 0 G = 0
+    B+=4 # Move from red to purple
+    if(B >= 255){
+        G+=4 # Move to cyan
+        R-=4
     }
-    return 0
+    if(G >= 255) { 
+        B-=8 # Move toward pure green
+    }
+    if(B <= 50) {
+        R+=8 # Finish with yellow
+    }
+    # Comment this section for mono-chromatic schemes
+        
 }
 
-    Target = owner()
-    Force = 2000
-    create_ball()  
+function vector circle_graph() {
+    X = Radius*cos(Offset*I)
+    Y = Radius*sin(Offset*I)
+    Z = 0
+    Vec = vec(X,Y,Z)
+    return Vec
 }
 
-Ball:setPos(Target:pos() + vec(0,0,90))
-
-if(Target:keyAttack2()) {
-    Has_ball = 0
-    Ball:applyForce(Target:eye() * Ball:mass() * Force)
-    Ball:setTrails(40,60,1,"trails/plasma",vec(255,15,5),225)
-    Ball:setTrails(20,30,2,"trails/plasma",vec(5,15,255),255)
-    Ball = Nil
+function vector saddle_graph() {
+    X = Radius*cos(Offset*I)
+    Y = Radius*sin(Offset*I)
+    Z = (10*sin(Offset*I))*(10*sin(Offset*I))
+    Vec = vec(X,Y,Z)
+    return Vec
 }
-if(!Has_ball) {
-    create_ball()
+
+function vector helix_graph() {
+    X = Radius*cos(Offset*I)
+    Y = Radius*sin(Offset*I)
+    Z = (Offset*I)/2
+    Vec = vec(X,Y,Z)*2
+    return Vec
+}
+
+function vector ring_graph() {
+    # Num = 300, Radius = 200 for best results
+    T = I
+    I = I*(Offset*3)
+    X = (Radius)*cos(I)
+    Y = (I*sin(I+1) - I/9)/2
+    Z = Radius*sin(I)
+    Vec = vec(X,Y,Z)
+    I = T
+    return Vec  
+}
+
+if(first()| duped()) {
+    entity():setAlpha(10)
+    R = 255
+    B = 0
+    G = 255
+    Ang = 0
+    Size = 5
+    Radius = 200
+    I = 0
+    Num = 300 # Should be even
+    Offset = 360/Num
+    End = Offset*Num
+    Origin = entity():pos() + vec(0,0,200)
+}
+
+if(I < Num) {
+    prop_spawner(Origin + ring_graph())
+    I++
 }

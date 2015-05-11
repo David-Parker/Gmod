@@ -9,6 +9,7 @@ interval(700)
 if(first()) {
     concmd("say [RapeMod]: RapeMod initialized, type !rape help for more info.")
     Origin = vec(1000,1000,1000)
+    Color = vec(240,98,200)
     entity():setPos(Origin)
     Over = 0 # Is the rape over?
     Time = 0 # Time elapsed for the current rape
@@ -19,28 +20,28 @@ if(first()) {
     
     ## Left Testicle
     holoCreate(1)
-    holoColor(1,vec(255,50,155))
+    holoColor(1,Color)
     holoModel(1,"sphere3")
-    holoScale(1,vec(2,2,2))
+    holoScale(1,vec(5,5,5))
     
     ## Right Testicle
     holoCreate(2)
-    holoColor(2,vec(255,50,155))
+    holoColor(2,Color)
     holoModel(2,"sphere3")
-    holoScale(2,vec(2,2,2))
+    holoScale(2,vec(5,5,5))
     
     ## Shaft
     holoCreate(3)
-    holoColor(3,vec(255,50,155))
+    holoColor(3,Color)
     holoModel(3,"cylinder")
-    holoScale(3,vec(1.7,1.7,2.5))
+    holoScale(3,vec(4,4,7))
     holoAng(3,ang(0,0,0))
     
     ## Tip
     holoCreate(4)
-    holoColor(4,vec(255,70,175))
+    holoColor(4,Color)
     holoModel(4,"sphere3")
-    holoScale(4,vec(2,2,2))
+    holoScale(4,vec(5,5,5))
 }
 if(clk()) {
     if(Target != entity()) {

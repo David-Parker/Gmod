@@ -4,7 +4,7 @@
 @outputs 
 @persist Speed Scale
 @trigger 
-interval(1)
+interval(100)
 X = players()
 function void createHolos() { # Serialize the holocubes into an array, with unique ID's for each player
     for(I = 1, X:count()) {
@@ -15,8 +15,8 @@ function void createHolos() { # Serialize the holocubes into an array, with uniq
     }
 }
 if(first()) {
-    Speed = 0
-    Scale = 2
+    Speed = 1
+    Scale = 4
     createHolos()
 }
 for(I = 1, X:count()) {
@@ -25,6 +25,7 @@ for(I = 1, X:count()) {
         holoAlpha(3*I + 1,255)
         holoAlpha(3*I + 2,255)
         holoAlpha(3*I + 3,255)
+        holoPos(3*I, Player:pos() + vec(0,0,80))
     }
     else {
         holoAlpha(3*I + 1,0)
